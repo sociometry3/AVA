@@ -1,0 +1,31 @@
+{
+    "categoryOutlier": {
+        "main": "${measure} has ${total} categories in the ${dimension} that are prominent compared to other dimensions: &{outliers}.",
+        "outliers": "${.x}"
+    },    
+    "changePoint": {
+        "main": "In ${dateRange}, ${measure} has ${total} major changes, which is worthy of attention."
+    },
+    "commonness": {
+        "main": "Most of the dimension values of ${dimensions} have ${insightType} on ${measures}."
+    },
+    "correlation": {
+        "main": "${m1} is most correlated with ${m2} with a correlation coefficient of ${pcorr}."
+    },
+    "exception": {
+        "main": "Most of the dimension values of ${dimensions} have ${insightType} on ${measures}, except for &{exceptionList}."
+    },
+    "lowVariance": {
+        "main": "The quantity is disassembled according to ${dimension}, and ${measure} are evenly distributed, with an average of ${mean}."
+    },
+    "majority": {
+        "main": "Breaking down the ${measure} by ${dimension}, the ${measure} for ${dimValue} is significantly higher than the other dimensions, at ${y}, ${proportion} of the total (${total})."
+    },
+    "timeSeriesOutlier": {
+        "main": "In ${dateRange}, ${measure} fluctuates within the range of ${max} to ${min}, with ${total} outliers, sorted by size above the baseline as follows.",
+        "item": "${.x}, ${measure} for ${.y}, compared to the baseline value ${.base}, ${.diffDesc} ${.diff}."
+    },
+    "trend": {
+        "main": "In ${dateRange}, the ${measure} goes ${trend}."
+    }
+}

@@ -93,7 +93,13 @@ export type {
 } from './data';
 
 /* insight */
-export { getInsights, generateInsightVisualizationSpec, insightPatternsExtractor, getSpecificInsight } from './insight';
+export {
+  getInsights,
+  generateInsightVisualizationSpec,
+  insightPatternsExtractor,
+  getSpecificInsight,
+  setI18nResource,
+} from './insight';
 export type {
   Datum,
   DomainType,

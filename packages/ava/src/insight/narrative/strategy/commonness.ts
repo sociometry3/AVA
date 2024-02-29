@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { generateTextSpec } from '../../../ntv';
+import { i18n } from '../i18nResource';
 
 import { InsightNarrativeStrategy } from './base';
 import { getInsightName, getDefaultSeparator } from './helpers';
@@ -17,25 +18,19 @@ const variableMetaMap = {
 export default class CommonnessNarrativeStrategy extends InsightNarrativeStrategy<HomogeneousPatternInfo> {
   static readonly insightType: HomogeneousInsightType = 'commonness';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '大部分 ${dimensions} 的维值在 ${measures} 上具有 ${insightType}。',
+        template: i18n[lang].commonness.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template: 'Most of the dimension values of ${dimensions} have ${insightType} on ${measures}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: HomogeneousInsightInfo, lang: Language) {
     const { measures, dimensions, insightType } = insightInfo;
     const spec = generateTextSpec({
-      structures: CommonnessNarrativeStrategy.structures[lang],
+      structures: CommonnessNarrativeStrategy.getStructures(lang),
       variable: {
         measures: measures.map((m) => m.fieldName).join(getDefaultSeparator(lang)),
         dimensions: dimensions.map((m) => m.fieldName).join(getDefaultSeparator(lang)),

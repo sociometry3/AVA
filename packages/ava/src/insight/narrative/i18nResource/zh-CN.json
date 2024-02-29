@@ -1,0 +1,31 @@
+{
+    "categoryOutlier": {
+        "main": "${measure} 在 ${dimension} 上有 ${total} 个类别相比其他维值突出：&{outliers}。",
+        "outliers": "${.x}"
+    },    
+    "changePoint": {
+        "main": "${measure} 在 ${dateRange} 中，共出现 ${total} 次较大变化，值得关注。"
+    },
+    "commonness": {
+        "main": "大部分 ${dimensions} 的维值在 ${measures} 上具有 ${insightType}。"
+    },
+    "correlation": {
+        "main": "${m1} 与 ${m2} 相关性最大，相关系数为 ${pcorr}。"
+    },
+    "exception": {
+        "main": "大部分 ${dimensions} 的维值在 ${measures} 上具有 ${insightType}，除了&{exceptionList}。"
+    },
+    "lowVariance": {
+        "main": "按照 ${dimension} 对 ${measure} 进行拆解，指标分布均匀，平均为 ${mean}。"
+    },
+    "majority": {
+        "main": "按照 ${dimension} 对 ${measure} 进行拆解，${dimValue} 的 ${measure} 显著高于其他维值，为 ${y}, 占总数（${total}）的 ${proportion}。"
+    },
+    "timeSeriesOutlier": {
+        "main": "${dateRange}，${measure} 波动范围为最大值 ${max}, 最小值 ${min}，有 ${total} 个异常点，按超过基线大小排序如下：",
+        "item": "${.x}，${measure} 为 ${.y}, 相比基线（${.base}）${.diffDesc} ${.diff}。"
+    },
+    "trend": {
+        "main": "${dateRange}，${measure}${trend}。"
+    }
+}

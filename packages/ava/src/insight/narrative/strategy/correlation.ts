@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { generateTextSpec } from '../../../ntv';
+import { i18n } from '../i18nResource';
 
 import { InsightNarrativeStrategy } from './base';
 
@@ -21,19 +22,13 @@ const variableMetaMap = {
 export default class CorrelationNarrativeStrategy extends InsightNarrativeStrategy<CorrelationInfo> {
   static readonly insightType: InsightType = 'correlation';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '${m1} 与 ${m2} 相关性最大，相关系数为 ${pcorr}。',
+        template: i18n[lang].correlation.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template: '${m1} is most correlated with ${m2} with a correlation coefficient of ${pcorr}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<CorrelationInfo>, lang: Language) {
@@ -43,7 +38,7 @@ export default class CorrelationNarrativeStrategy extends InsightNarrativeStrate
       pcorr,
     } = patterns[0];
     const spec = generateTextSpec({
-      structures: CorrelationNarrativeStrategy.structures[lang],
+      structures: CorrelationNarrativeStrategy.getStructures(lang),
       variable: {
         m1,
         m2,

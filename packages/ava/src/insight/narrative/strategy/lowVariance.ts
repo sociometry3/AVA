@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { generateTextSpec } from '../../../ntv';
+import { i18n } from '../i18nResource';
 
 import { InsightNarrativeStrategy } from './base';
 
@@ -18,27 +19,20 @@ const variableMetaMap = {
 export default class LowVarianceNarrativeStrategy extends InsightNarrativeStrategy<LowVarianceInfo> {
   static readonly insightType: InsightType = 'low_variance';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '按照 ${dimension} 对 ${measure} 进行拆解，指标分布均匀，平均为 ${mean}。',
+        template: i18n[lang].lowVariance.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template:
-          'The quantity is disassembled according to ${dimension}, and ${measure} are evenly distributed, with an average of ${mean}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<LowVarianceInfo>, lang: Language) {
     const { patterns } = insightInfo;
     const { dimension, measure, mean } = patterns[0];
     const spec = generateTextSpec({
-      structures: LowVarianceNarrativeStrategy.structures[lang],
+      structures: LowVarianceNarrativeStrategy.getStructures(lang),
       variable: {
         dimension,
         measure,

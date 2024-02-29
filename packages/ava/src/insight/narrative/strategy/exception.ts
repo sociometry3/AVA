@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { generateTextSpec } from '../../../ntv';
+import { i18n } from '../i18nResource';
 
 import { InsightNarrativeStrategy } from './base';
 import { getInsightName, getDefaultSeparator } from './helpers';
@@ -20,20 +21,13 @@ const variableMetaMap = {
 export default class ExceptionNarrativeStrategy extends InsightNarrativeStrategy<HomogeneousPatternInfo> {
   static readonly insightType: HomogeneousInsightType = 'exception';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '大部分 ${dimensions} 的维值在 ${measures} 上具有 ${insightType}，除了&{exceptionList}。',
+        template: i18n[lang].exception.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template:
-          'Most of the dimension values of ${dimensions} have ${insightType} on ${measures}, except for &{exceptionList}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   protected static structureTemps: Record<Language, StructureTemp[]> = {
@@ -60,7 +54,7 @@ export default class ExceptionNarrativeStrategy extends InsightNarrativeStrategy
   generateTextSpec(insightInfo: HomogeneousInsightInfo, lang: Language) {
     const { measures, dimensions, insightType, exceptions } = insightInfo;
     const spec = generateTextSpec({
-      structures: ExceptionNarrativeStrategy.structures[lang],
+      structures: ExceptionNarrativeStrategy.getStructures(lang),
       structureTemps: ExceptionNarrativeStrategy.structureTemps[lang],
       variable: {
         measures: measures.map((m) => m.fieldName).join(getDefaultSeparator(lang)),

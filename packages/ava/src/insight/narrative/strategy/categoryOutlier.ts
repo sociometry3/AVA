@@ -1,5 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import { generateTextSpec } from '../../../ntv';
+import { i18n } from '../i18nResource';
 
 import { InsightNarrativeStrategy } from './base';
 import { getDefaultSeparator } from './helpers';
@@ -22,55 +23,39 @@ const variableMetaMap = {
 export default class CategoryOutlierNarrativeStrategy extends InsightNarrativeStrategy<CategoryOutlierInfo> {
   static readonly insightType: InsightType = 'category_outlier';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '${measure} 在 ${dimension} 上有 ${total} 个类别相比其他维值突出：&{outliers}。',
+        template: i18n[lang].categoryOutlier.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template:
-          '${measure} has ${total} categories in the ${dimension} that are prominent compared to other dimensions: &{outliers}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
-  protected static structureTemps: Record<Language, StructureTemp[]> = {
-    'zh-CN': [
+  protected static getStructureTemps: (lang: Language) => StructureTemp[] = (lang) => {
+    return [
       {
         templateId: 'outliers',
-        template: '${.x}',
-        separator: getDefaultSeparator('zh-CN'),
+        template: i18n[lang].categoryOutlier.outliers,
+        separator: getDefaultSeparator(lang),
         variableMetaMap,
         useVariable: 'patterns',
       },
-    ],
-    'en-US': [
-      {
-        templateId: 'outliers',
-        template: '${.x}',
-        separator: getDefaultSeparator('en-US'),
-        variableMetaMap,
-        useVariable: 'patterns',
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<CategoryOutlierInfo>, lang: Language) {
     const { patterns } = insightInfo;
     const { dimension, measure } = patterns[0];
     const spec = generateTextSpec({
-      structures: CategoryOutlierNarrativeStrategy.structures[lang],
+      structures: CategoryOutlierNarrativeStrategy.getStructures(lang),
       variable: {
         dimension,
         measure,
         total: patterns.length,
         patterns,
       },
-      structureTemps: CategoryOutlierNarrativeStrategy.structureTemps[lang],
+      structureTemps: CategoryOutlierNarrativeStrategy.getStructureTemps(lang),
     });
 
     return spec.sections[0].paragraphs as ParagraphSpec[];

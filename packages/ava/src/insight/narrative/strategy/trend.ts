@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { first, last } from 'lodash';
 
+import { i18n } from '../i18nResource';
 import { generateTextSpec } from '../../../ntv';
 
 import { InsightNarrativeStrategy } from './base';
@@ -29,26 +30,20 @@ const variableMetaMap = {
 export default class TrendNarrativeStrategy extends InsightNarrativeStrategy<TrendInfo> {
   static readonly insightType: InsightType = 'trend';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template: '${dateRange}，${measure}${trend}。',
+        template: i18n[lang].trend.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template: 'In ${dateRange}, the ${measure} goes ${trend}.',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<TrendInfo>, lang: Language) {
     const { patterns, data } = insightInfo;
     const { dimension, measure, trend } = patterns[0];
     const spec = generateTextSpec({
-      structures: TrendNarrativeStrategy.structures[lang],
+      structures: TrendNarrativeStrategy.getStructures(lang),
       variable: {
         dateRange: `${first(data)[dimension]}~${last(data)[dimension]}`,
         measure,

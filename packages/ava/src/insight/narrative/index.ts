@@ -1,4 +1,5 @@
 import InsightNarrativeStrategyFactory from './factory';
+import { setI18nResource } from './i18nResource';
 
 import type { HomogeneousInsightInfo } from './strategy/base';
 import type { InsightInfo, InsightVisualizationOptions, PatternInfo, HomogeneousPatternInfo } from '../types';
@@ -22,3 +23,5 @@ export default function generateInsightNarrative(
   const result = strategy.generateTextSpec(insightInfo, lang);
   return result;
 }
+
+export { setI18nResource };

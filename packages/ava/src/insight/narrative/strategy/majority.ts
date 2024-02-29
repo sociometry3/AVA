@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { sumBy } from 'lodash';
 
+import { i18n } from '../i18nResource';
 import { generateTextSpec } from '../../../ntv';
 
 import { InsightNarrativeStrategy } from './base';
@@ -29,21 +30,13 @@ const variableMetaMap = {
 export default class MajorityNarrativeStrategy extends InsightNarrativeStrategy<MajorityInfo> {
   static readonly insightType: InsightType = 'majority';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template:
-          '按照 ${dimension} 对 ${measure} 进行拆解，${dimValue} 的 ${measure} 显著高于其他维值，为 ${y}, 占总数（${total}）的 ${proportion}。',
+        template: i18n[lang].majority.main,
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template:
-          'Breaking down the ${measure} by ${dimension}, the ${measure} for ${dimValue} is significantly higher than the other dimensions, at ${y}, ${proportion} of the total (${total}).',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<MajorityInfo>, lang: Language) {
@@ -51,7 +44,7 @@ export default class MajorityNarrativeStrategy extends InsightNarrativeStrategy<
     const { dimension, measure, x, y } = patterns[0];
     const total = sumBy(data, measure);
     const spec = generateTextSpec({
-      structures: MajorityNarrativeStrategy.structures[lang],
+      structures: MajorityNarrativeStrategy.getStructures(lang),
       variable: {
         dimension,
         measure,

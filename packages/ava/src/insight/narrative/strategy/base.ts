@@ -10,7 +10,11 @@ export abstract class InsightNarrativeStrategy<
 
   protected static structures: Record<Language, Structure[]>;
 
+  protected static getStructures?: (lang: Language) => Structure[];
+
   protected static structureTemps?: Record<Language, StructureTemp[]>;
+
+  protected static getStructureTemps?: (lang: Language) => StructureTemp[];
 
   abstract generateTextSpec(insightInfo: InsightInfo<P> | HomogeneousInsightInfo, lang: Language): ParagraphSpec[];
 

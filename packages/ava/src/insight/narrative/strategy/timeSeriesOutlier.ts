@@ -1,6 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import { first, last, maxBy, minBy } from 'lodash';
 
+import { i18n } from '../i18nResource';
 import { generateTextSpec } from '../../../ntv';
 
 import { InsightNarrativeStrategy } from './base';
@@ -42,35 +43,20 @@ const variableMetaMap = {
 export default class TimeSeriesOutlierNarrativeStrategy extends InsightNarrativeStrategy<TimeSeriesOutlierInfo> {
   static readonly insightType: InsightType = 'time_series_outlier';
 
-  protected static structures: Record<Language, Structure[]> = {
-    'zh-CN': [
+  protected static getStructures?: (lang: Language) => Structure[] = (lang) => {
+    return [
       {
-        template:
-          '${dateRange}，${measure} 波动范围为最大值 ${max}, 最小值 ${min}，有 ${total} 个异常点，按超过基线大小排序如下：',
+        template: i18n[lang].timeSeriesOutlier.main,
         variableMetaMap,
       },
       {
-        template: '${.x}，${measure} 为 ${.y}, 相比基线（${.base}）${.diffDesc} ${.diff}。',
+        template: i18n[lang].timeSeriesOutlier.item,
         displayType: 'bullet',
         bulletOrder: true,
         useVariable: 'outliers',
         variableMetaMap,
       },
-    ],
-    'en-US': [
-      {
-        template:
-          'In ${dateRange}, ${measure} fluctuates within the range of ${max} to ${min}, with ${total} outliers, sorted by size above the baseline as follows.',
-        variableMetaMap,
-      },
-      {
-        template: '${.x}, ${measure} for ${.y}, compared to the baseline value ${.base}, ${.diffDesc} ${.diff}.',
-        displayType: 'bullet',
-        bulletOrder: true,
-        useVariable: 'outliers',
-        variableMetaMap,
-      },
-    ],
+    ];
   };
 
   generateTextSpec(insightInfo: InsightInfo<TimeSeriesOutlierInfo>, lang: Language) {
@@ -78,7 +64,7 @@ export default class TimeSeriesOutlierNarrativeStrategy extends InsightNarrative
     const { measure, dimension } = patterns[0];
 
     const spec = generateTextSpec({
-      structures: TimeSeriesOutlierNarrativeStrategy.structures[lang],
+      structures: TimeSeriesOutlierNarrativeStrategy.getStructures(lang),
       variable: {
         dateRange: `${first(data)[dimension]}~${last(data)[dimension]}`,
         total: patterns.length,
